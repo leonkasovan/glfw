@@ -28,7 +28,7 @@ package glfw
 // GLFW Options:
 #cgo linux,x11 CFLAGS: -D_GLFW_X11 -D_GNU_SOURCE
 #cgo linux,wayland CFLAGS: -D_GLFW_WAYLAND -D_GNU_SOURCE
-#cgo linux,kmsdrm CFLAGS: -DGLFW_BUILD_KMSDRM -D_GLFW_KMSDRM -DDEBUG
+#cgo linux,kmsdrm CFLAGS: -D_GLFW_KMSDRM -DDEBUG
 
 // Linker Options:
 #cgo linux,!gles1,!gles2,!gles3,!vulkan LDFLAGS: -lGL

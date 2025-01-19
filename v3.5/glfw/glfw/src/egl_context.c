@@ -263,15 +263,17 @@ static void page_flip_handler(int fd, unsigned int frame, unsigned int sec, unsi
     *waiting_for_flip = 0;
 }
 
-int64_t get_time_ns(void) {
-    struct timespec tv;
-    clock_gettime(CLOCK_MONOTONIC, &tv);
-    return tv.tv_nsec + tv.tv_sec * NSEC_PER_SEC;
-}
+#ifdef DEBUG
+// int64_t get_time_ns(void) {
+//     struct timespec tv;
+//     clock_gettime(CLOCK_MONOTONIC, &tv);
+//     return tv.tv_nsec + tv.tv_sec * NSEC_PER_SEC;
+// }
+#endif
 
 static void swapBuffersEGL(_GLFWwindow* window) {
 #ifdef DEBUG    
-    static unsigned int frame = 0;
+    // static unsigned int frame = 0;
 #endif
     if (window != _glfwPlatformGetTls(&_glfw.contextSlot)) {
         _glfwInputError(GLFW_PLATFORM_ERROR,
@@ -356,14 +358,13 @@ static void swapBuffersEGL(_GLFWwindow* window) {
 #endif
 
 #ifdef DEBUG
-    int64_t cur_time = get_time_ns();
-    if (cur_time > (_glfw.report_time + 2 * NSEC_PER_SEC))
-    {
-        debug_printf("Render %u fps\n", frame);
-        _glfw.report_time = cur_time;
-        frame = 0;
-    }
-    frame++;
+    // int64_t cur_time = get_time_ns();
+    // if (cur_time > (_glfw.report_time + 2 * NSEC_PER_SEC)) {
+    //     debug_printf("Render %u fps\n", frame);
+    //     _glfw.report_time = cur_time;
+    //     frame = 0;
+    // }
+    // frame++;
 #endif
 }
 

@@ -27,7 +27,7 @@ package glfw
 // ----------------
 // GLFW Options:
 #cgo linux,x11 CFLAGS: -D_GLFW_X11 -D_GNU_SOURCE
-#cgo linux,wayland CFLAGS: -D_GLFW_WAYLAND -D_GNU_SOURCE
+#cgo linux,wayland CFLAGS: -D_GLFW_WAYLAND -D_GNU_SOURCE -Iglfw/deps/wayland
 #cgo linux,kmsdrm CFLAGS: -D_GLFW_KMSDRM -DDEBUG
 
 // Linker Options:
@@ -47,7 +47,7 @@ package glfw
 #cgo freebsd,wayland netbsd,wayland pkg-config: wayland-client wayland-cursor wayland-egl epoll-shim
 #cgo freebsd netbsd openbsd CFLAGS: -D_GLFW_HAS_DLOPEN
 #cgo freebsd,!wayland netbsd,!wayland openbsd CFLAGS: -D_GLFW_X11 -D_GLFW_HAS_GLXGETPROCADDRESSARB
-#cgo freebsd,wayland netbsd,wayland CFLAGS: -D_GLFW_WAYLAND
+#cgo freebsd,wayland netbsd,wayland CFLAGS: -D_GLFW_WAYLAND -Iglfw/deps/wayland
 
 // Linker Options:
 #cgo freebsd netbsd openbsd LDFLAGS: -lm

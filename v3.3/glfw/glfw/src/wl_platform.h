@@ -23,7 +23,9 @@
 //    distribution.
 //
 //========================================================================
-
+#ifndef WL_MARSHAL_FLAG_DESTROY
+#define WL_MARSHAL_FLAG_DESTROY (1 << 0)
+#endif
 #include <wayland-client.h>
 #include <xkbcommon/xkbcommon.h>
 #include <xkbcommon/xkbcommon-compose.h>

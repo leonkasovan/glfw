@@ -243,6 +243,7 @@ static void makeContextCurrentEGL(_GLFWwindow* window) {
     _glfwPlatformSetTls(&_glfw.contextSlot, window);
 }
 
+#ifdef _GLFW_KMSDRM
 static void page_flip_handler(int fd, unsigned int frame, unsigned int sec, unsigned int usec, void* data) {
     /* suppress 'unused parameter' warnings */
     (void) fd, (void) frame, (void) sec, (void) usec;
@@ -250,6 +251,7 @@ static void page_flip_handler(int fd, unsigned int frame, unsigned int sec, unsi
     int* waiting_for_flip = data;
     *waiting_for_flip = 0;
 }
+#endif
 
 #ifdef DEBUG
 #ifdef __linux__
@@ -282,6 +284,7 @@ static void swapBuffersEGL(_GLFWwindow* window) {
 #endif
 
 #ifdef _GLFW_KMSDRM
+    if (_glfw.platform.platformID == GLFW_PLATFORM_KMSDRM) {
     fd_set fds;
     drmEventContext evctx = {
             .version = 2,
@@ -345,14 +348,17 @@ static void swapBuffersEGL(_GLFWwindow* window) {
         gbm_surface_release_buffer(_glfw.kmsdrm.gbm.surface, _glfw.kmsdrm.gbm.bo);
     }
     _glfw.kmsdrm.gbm.bo = next_bo;
-#else
-    eglSwapBuffers(_glfw.egl.display, window->context.egl.surface);
+    }
 #endif
+
+    if (_glfw.platform.platformID == GLFW_PLATFORM_WAYLAND || _glfw.platform.platformID == GLFW_PLATFORM_X11) {
+        eglSwapBuffers(_glfw.egl.display, window->context.egl.surface);
+    }
 
 #ifdef DEBUG
 #ifdef __linux__    
     int64_t cur_time = get_time_ns();
-    if (cur_time > (_glfw.report_time + 2 * NSEC_PER_SEC)) {
+    if (cur_time > (_glfw.report_time + NSEC_PER_SEC)) {
         debug_printf("Render %u fps\n", frame);
         _glfw.report_time = cur_time;
         frame = 0;
@@ -579,11 +585,10 @@ GLFWbool _glfwInitEGL(void) {
         _glfwTerminateEGL();
         return GLFW_FALSE;
     } else {
-     // printf("_glfwInitEGL: using EGL Library version %d.%d\n", major, minor);
         debug_printf("\n===================================\n");
-        printf("EGL information:\n");
-        printf("  version: %s\n", eglQueryString(_glfw.egl.display, 0x3054));
-        printf("  vendor: %s\n", eglQueryString(_glfw.egl.display, 0x3053));
+        debug_printf("EGL information:\n");
+        debug_printf("  version: %s\n", eglQueryString(_glfw.egl.display, 0x3054));
+        debug_printf("  vendor: %s\n", eglQueryString(_glfw.egl.display, 0x3053));
         debug_printf("  client extensions: \"%s\"\n", eglQueryString(EGL_NO_DISPLAY, EGL_EXTENSIONS));
         debug_printf("  display extensions: \"%s\"\n", eglQueryString(_glfw.egl.display, EGL_EXTENSIONS));
         debug_printf("===================================\n");

@@ -45,8 +45,6 @@
 #error "You must not define any header option macros when compiling GLFW"
 #endif
 
-#define DEBUG 1
-
 #define GLFW_INCLUDE_NONE
 #include "../include/GLFW/glfw3.h"
 
@@ -515,6 +513,12 @@ struct _GLFWcontext {
         int             height;
         void* buffer;
     } osmesa;
+
+#if defined(_GLFW_SDL2)
+    struct {
+        SDL_GLContext   handle;
+    } sdl2;
+#endif
 
     // This is defined in platform.h
     GLFW_PLATFORM_CONTEXT_STATE
